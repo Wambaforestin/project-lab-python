@@ -10,25 +10,76 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout Repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step 2: Set up Python Environment
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12.7'  
+          python-version: '3.12.7'
 
+      # Step 3: Cache Dependencies
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('projects/**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      # Step 4: Install Dependencies for Each Subproject
       - name: Install dependencies for each subproject
         run: |
-          # Loop through each subproject directory
           for dir in projects/*; do
             if [ -d "$dir" ]; then
               echo "Installing dependencies for $dir"
-              # Check if requirements.txt exists in the subproject
               if [ -f "$dir/requirements.txt" ]; then
                 pip install -r "$dir/requirements.txt"
               else
                 echo "No requirements.txt found in $dir"
               fi
+            fi
+          done
+
+      # Step 5: Generate README.md for New Projects
+      - name: Generate README.md for new projects
+        run: |
+          for dir in projects/*; do
+            if [ ! -f "$dir/README.md" ]; then
+              echo "Generating README.md for $dir"
+              project_name=$(basename "$dir")
+              cat <<- EOF > "$dir/README.md"
+              # $project_name
+
+              ## Overview
+              This is the **$project_name** project, part of the Python project repository. This project includes functionality specific to the project's goal and is designed with modularity and reusability in mind.
+
+              ## Setup
+              1. Clone the repository and navigate to this subproject:
+                  ```bash
+                  git clone <repository-url>
+                  cd projects/$project_name
+                  ```
+
+              2. Activate a virtual environment and install dependencies:
+                  ```bash
+                  python3 -m venv venv
+                  source venv/bin/activate  # or venv\Scripts\activate on Windows
+                  pip install -r requirements.txt
+                  ```
+
+              ## Usage
+              1. Run the main script to see the project in action:
+                  ```bash
+                  python main.py
+                  ```
+
+              ## Contributing
+              Contributions are welcome! Feel free to open issues or submit pull requests.
+
+              Generated on $(date).
+              EOF
             fi
           done

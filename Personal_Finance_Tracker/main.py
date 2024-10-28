@@ -1,8 +1,8 @@
-import pandas as pd
+import pandas as pd # type: ignore
 import csv
 from datetime import datetime
 from data_entry import get_amount, get_category, get_date, get_description
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt # type: ignore
 
 class CSV:
     CSV_FILE = "finance_date.csv" #name of the csv file that will store the data
@@ -65,12 +65,13 @@ class CSV:
             print("\n Summary")
             print(f"Total Income: €{total_income: .2f}")
             print(f"Total Expense: €{total_expense: .2f}")
-            print(f"Net savings: €{(total_income - total_expense): .2f}")
+            print(f"Net savings: €{(total_income - total_expense):.2f}")
             
         return filtered_df
     
     @classmethod
     def plot_transactions(cls,df):
+        df["date"] = pd.to_datetime(df["date"], format="%d-%m-%Y")
         df.set_index("date", inplace=True)
         
         income_df = df[df["category"] == "Income"].resample("D").sum().reindex(df.index, fill_value=0) #Resampling the data to daily frequency 

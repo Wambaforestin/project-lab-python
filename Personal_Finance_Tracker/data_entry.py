@@ -1,6 +1,7 @@
 from datetime import datetime
 
 date_format = "%d-%m-%Y"
+
 categories = {
     "I": "Income",
     "E": "Expense"

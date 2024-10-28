@@ -1,10 +1,15 @@
 from datetime import datetime
 
 date_format = "%d-%m-%Y"
+
 categories = {
     "I": "Income",
     "E": "Expense"
 }
+
+""" 
+creating all data entry functions for the user to input the data
+"""
 
 def get_date(prompt, allow_default=False):
     date = input(prompt)

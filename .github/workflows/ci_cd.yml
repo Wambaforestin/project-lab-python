@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12.7'  
+          python-version: '3.12.7'  # Set your desired Python version
 
       - name: Install dependencies for each subproject
         run: |
@@ -30,5 +30,32 @@ jobs:
               else
                 echo "No requirements.txt found in $dir"
               fi
+            fi
+          done
+
+      - name: Run README Generation
+        run: |
+          # Loop through each subproject directory to generate README files
+          for dir in projects/*; do
+            if [ -d "$dir" ]; then
+              project_name=$(basename "$dir")
+              readme_file="$dir/README.md"
+
+              # Create a README file with documentation
+              echo "# $project_name" > "$readme_file"
+              echo "" >> "$readme_file"
+              echo "## Description" >> "$readme_file"
+              echo "This is the README for the $project_name project." >> "$readme_file"
+              echo "" >> "$readme_file"
+              echo "## Installation" >> "$readme_file"
+              echo "To install the dependencies, run the following command:" >> "$readme_file"
+              echo "\`\`\`bash" >> "$readme_file"
+              echo "pip install -r requirements.txt" >> "$readme_file"
+              echo "\`\`\`" >> "$readme_file"
+              echo "" >> "$readme_file"
+              echo "## Usage" >> "$readme_file"
+              echo "Instructions for using the $project_name project go here." >> "$readme_file"
+
+              echo "Generated README for $project_name"
             fi
           done

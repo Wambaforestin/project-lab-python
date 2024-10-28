@@ -59,8 +59,8 @@ class CSV:
                 "date": lambda x: x.strftime("%d-%m-%Y")
             }))
             
-            total_income = filtered_df[filtered_df["category"] == "Income"]["amount"].sum()
-            total_expense = filtered_df[filtered_df["category"] == "Expense"]["amount"].sum()
+            total_income = filtered_df[filtered_df["category"] == "Income"]["amount"].fillna(0).sum()
+            total_expense = filtered_df[filtered_df["category"] == "Expense"]["amount"].fillna(0).sum()
             
             print("\n Summary")
             print(f"Total Income: €{total_income: .2f}")
@@ -70,12 +70,13 @@ class CSV:
         return filtered_df
     
     @classmethod
-    def plot_transactions(cls,df):
+    def plot_transactions(cls, df):
         df["date"] = pd.to_datetime(df["date"], format="%d-%m-%Y")
+        df.sort_values("date", inplace=True)
         df.set_index("date", inplace=True)
         
-        income_df = df[df["category"] == "Income"].resample("D").sum().reindex(df.index, fill_value=0) #Resampling the data to daily frequency 
-        expense_df = df[df["category"] == "Expense"].resample("D").sum().reindex(df.index, fill_value=0) #Resampling the data to daily frequency
+        income_df = df[df["category"] == "Income"].resample("D").sum().reindex(df.index, fill_value=0)
+        expense_df = df[df["category"] == "Expense"].resample("D").sum().reindex(df.index, fill_value=0)
         
         plt.figure(figsize=(10, 6))
         plt.plot(income_df.index, income_df["amount"], label="Income", color="green")
@@ -85,8 +86,8 @@ class CSV:
         plt.title("Income vs Expense")
         plt.legend()
         plt.grid(True)
+        plt.tight_layout()  # Ensure everything fits without overlap
         plt.show()
-    
 
 def add():
     CSV.initialize()

@@ -65,12 +65,13 @@ class CSV:
             print("\n Summary")
             print(f"Total Income: €{total_income: .2f}")
             print(f"Total Expense: €{total_expense: .2f}")
-            print(f"Net savings: €{(total_income - total_expense): .2f}")
+            print(f"Net savings: €{(total_income - total_expense):.2f}")
             
         return filtered_df
     
     @classmethod
     def plot_transactions(cls,df):
+        df["date"] = pd.to_datetime(df["date"], format="%d-%m-%Y")
         df.set_index("date", inplace=True)
         
         income_df = df[df["category"] == "Income"].resample("D").sum().reindex(df.index, fill_value=0) #Resampling the data to daily frequency 

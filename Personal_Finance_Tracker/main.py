@@ -1,8 +1,8 @@
-import pandas as pd
+import pandas as pd # type: ignore
 import csv
 from datetime import datetime
 from data_entry import get_amount, get_category, get_date, get_description
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt # type: ignore
 
 class CSV:
     CSV_FILE = "finance_date.csv" #name of the csv file that will store the data

@@ -7,10 +7,6 @@ categories = {
     "E": "Expense"
 }
 
-""" 
-creating all data entry functions for the user to input the data
-"""
-
 def get_date(prompt, allow_default=False):
     date = input(prompt)
     if allow_default and not date:

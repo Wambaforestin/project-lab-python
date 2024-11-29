@@ -48,7 +48,7 @@ jobs:
             fi
 
             project_name=$(basename "$dir")
-            readme_file="$dir/README.md"
+            readme_file="${dir%/}/README.md"  # Remove trailing slash to ensure proper path
 
             # Create a README file with documentation
             echo "# $project_name" > "$readme_file"

@@ -44,7 +44,7 @@ if __name__ == "__main__":
         fg="red",
     )
     
-    # pack the close button in the frame
+    # pack the close button in the frame 
     close_button.pack(
         side=ui.LEFT
     )

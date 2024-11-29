@@ -49,5 +49,6 @@ if __name__ == "__main__":
         side=ui.LEFT
     )
     
-    root.mainloop() # run the root window
+    # run the root window
+    root.mainloop()
     

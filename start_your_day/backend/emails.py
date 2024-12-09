@@ -18,7 +18,8 @@ class DailyEmail:
         }
         
         self.recipient_list = {
-            "email": os.getenv('RECIPIENT_EMAIL')  # Get the recipient email address from environment variables
+            "email1": os.getenv('RECIPIENT_EMAIL1'),   # Get the recipient email address from environment variables
+            "email2": os.getenv('RECIPIENT_EMAIL2')  # Get the recipient email address from environment variables
         } 
         
         self.sender_credentials = {
@@ -166,7 +167,7 @@ class DailyEmail:
         message = EmailMessage()
         message['Subject'] = f"🌞 Daily Digest - {datetime.datetime.now().strftime('%d %B %Y')} 🌞"
         message['From'] = self.sender_credentials['email']
-        message['To'] = self.recipient_list['email']
+        message['To'] = ', '.join(self.recipient_list.values()) # since we have multiple recipients, we join them with a comma
         
         # Add plain text and HTML content
         message_body_text, message_body_html = self.format_email()

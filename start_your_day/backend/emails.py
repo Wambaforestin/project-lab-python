@@ -199,4 +199,5 @@ if __name__ == '__main__':
         file.write(message)
         
     # Send the email
+    print("\n--- Sending Email ---")
     email.send_email()

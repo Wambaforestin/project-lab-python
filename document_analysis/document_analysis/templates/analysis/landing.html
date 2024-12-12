@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="min-h-screen">
+    <!-- Hero Section -->
+    <div class="container mx-auto px-4 py-16">
+        <div class="flex flex-col lg:flex-row items-center gap-12">
+            <!-- Hero Content -->
+            <div class="flex-1 text-center lg:text-left">
+                <h1 class="text-4xl lg:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 mb-6">
+                    Scale analysis.
+                    <br>
+                    Not workload.
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 max-w-2xl">
+                    Our AI-powered document analysis automates your content processing so you can focus on insights, faster.
+                </p>
+                <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                    {% if g.user %}
+                        <a href="{{ url_for('analysis.dashboard') }}" 
+                           class="px-8 py-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition shadow-lg">
+                            Go to Dashboard
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" 
+                           class="px-8 py-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition shadow-lg">
+                            Get Started Free
+                        </a>
+                    {% endif %}
+                    <a href="#features" 
+                       class="px-8 py-4 border-2 border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition">
+                        Learn More
+                    </a>
+                </div>
+                <div class="mt-6 flex justify-center lg:justify-start gap-8 text-sm text-gray-500">
+                    <span>✓ No credit card required</span>
+                    <span>✓ Free 14-day trial</span>
+                    <span>✓ Cancel anytime</span>
+                </div>
+            </div>
+            <!-- Hero Image -->
+            <div class="flex-1">
+                <img src="https://i.pinimg.com/736x/d1/5a/29/d15a29ce85ad7036435471429194b5d4.jpg" alt="Dashboard Preview" class="rounded-lg shadow-xl">
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div id="features" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Powerful Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Quiz Generation -->
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Quiz Generation</h3>
+                    <p class="text-gray-600">Automatically create interactive quizzes from your documents</p>
+                </div>
+
+                <!-- Smart Summary -->
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Smart Summary</h3>
+                    <p class="text-gray-600">Get AI-powered summaries of your documents instantly</p>
+                </div>
+
+                <!-- Translation -->
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Translation</h3>
+                    <p class="text-gray-600">Translate your content into multiple languages</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-purple-50 p-6 rounded-xl text-center">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">85%</div>
+                    <p class="text-gray-600">Faster Analysis</p>
+                </div>
+                <div class="bg-purple-50 p-6 rounded-xl text-center">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">10k+</div>
+                    <p class="text-gray-600">Documents Processed</p>
+                </div>
+                <div class="bg-purple-50 p-6 rounded-xl text-center">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">24/7</div>
+                    <p class="text-gray-600">Support Available</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t">
+        <div class="container mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Document Analysis</h3>
+                    <p class="text-gray-600">Transform your documents into interactive learning experiences</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Features</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li>Quiz Generation</li>
+                        <li>Smart Summary</li>
+                        <li>Translation</li>
+                        <li>Keyword Analysis</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li>Documentation</li>
+                        <li>FAQs</li>
+                        <li>API Reference</li>
+                        <li>Contact Support</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li>Email: support@example.com</li>
+                        <li>Phone: (555) 123-4567</li>
+                        <li>Location: San Francisco, CA</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t mt-12 pt-8 text-center text-gray-600">
+                <p>&copy; 2024 Document Analysis. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</div>
+{% endblock %}

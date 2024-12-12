@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ document['title'] }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Document Header -->
+    <div class="mb-8">
+        <div class="flex justify-between items-center">
+            <h1 class="text-3xl font-bold">{{ document['title'] }}</h1>
+            <div class="space-x-4">
+                <button onclick="generateQuiz()"
+                        class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                    Generate Quiz
+                </button>
+                <button onclick="generateSummary()"
+                        class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                    Create Summary
+                </button>
+            </div>
+        </div>
+        <p class="text-gray-500">Uploaded by {{ document['username'] }} on {{ document['created'].strftime('%Y-%m-%d %H:%M') }}</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Document Content -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Document Content</h2>
+                <div class="document-content prose max-w-none">
+                    {{ document['content']|safe }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Analyses -->
+        <div class="space-y-6">
+            {% for analysis in analyses %}
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">{{ analysis['type']|title }}</h2>
+                <div class="prose max-w-none">
+                    {{ analysis['content']|safe }}
+                </div>
+                <p class="text-sm text-gray-500 mt-4">
+                    Generated on {{ analysis['created'].strftime('%Y-%m-%d %H:%M') }}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/view.js') }}"></script>
+{% endblock %}

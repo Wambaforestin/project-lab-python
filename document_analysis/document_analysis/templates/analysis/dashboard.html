@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">Your Documents</h1>
+        <button onclick="document.getElementById('upload-modal').classList.remove('hidden')"
+            class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+            Upload New Document
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Recent Documents -->
+        <div class="bg-white/50 rounded-lg shadow-lg p-6 backdrop-blur-sm">
+            <h2 class="text-xl font-semibold mb-4">Recent Documents</h2>
+            {% if documents %}
+            <div class="space-y-4 recent-documents">
+                {% for doc in documents %}
+                <div class="bg-white p-4 rounded-lg shadow document-item" data-document-id="{{ doc['id'] }}"
+                    data-content="{{ doc['content']|replace('"', ' \\"')|replace('\n', '\\n' )|safe }}">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <input type="radio" name="selected_document" id="doc_{{ doc['id'] }}"
+                                class="document-selector w-4 h-4 text-purple-600" value="{{ doc['id'] }}">
+                            <div>
+                                <label for="doc_{{ doc['id'] }}" class="font-medium cursor-pointer">
+                                    {{ doc['title'] }}
+                                </label>
+                                <p class="text-sm text-gray-500">{{ doc['created'].strftime('%Y-%m-%d %H:%M') }}</p>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('analysis.analyze', id=doc['id']) }}"
+                            class="bg-purple-100 text-purple-600 px-3 py-1 rounded-lg hover:bg-purple-200">
+                            View
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-gray-500">No documents yet. Start by uploading one!</p>
+            {% endif %}
+        </div>
+
+        <!-- Quick Actions section -->
+        <div class="bg-white/50 rounded-lg shadow-lg p-6 backdrop-blur-sm">
+            <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+            <div class="space-y-4">
+                <button onclick="performAction('quiz')" data-action="quiz"
+                    data-document-id="{{ documents[0]['id'] if documents }}"
+                    class="w-full bg-purple-50 text-purple-600 p-3 rounded-lg hover:bg-purple-100 transition">
+                    Generate Quiz
+                </button>
+                <button onclick="performAction('summary')" data-action="summary"
+                    data-document-id="{{ documents[0]['id'] if documents }}"
+                    class="w-full bg-purple-50 text-purple-600 p-3 rounded-lg hover:bg-purple-100 transition">
+                    Create Summary
+                </button>
+                <button onclick="performAction('keywords')" data-action="keywords"
+                    data-document-id="{{ documents[0]['id'] if documents }}"
+                    class="w-full bg-purple-50 text-purple-600 p-3 rounded-lg hover:bg-purple-100 transition">
+                    Extract Keywords
+                </button>
+                <button onclick="performAction('translate')" data-action="translate"
+                    data-document-id="{{ documents[0]['id'] if documents }}"
+                    class="w-full bg-purple-50 text-purple-600 p-3 rounded-lg hover:bg-purple-100 transition">
+                    Translate Document
+                </button>
+            </div>
+        </div>
+
+        <!-- Recent Analyses -->
+        <div class="bg-white/50 rounded-lg shadow-lg p-6 backdrop-blur-sm">
+            <h2 class="text-xl font-semibold mb-4">Recent Documents</h2>
+            {% if documents %}
+            <!-- In the Recent Documents section -->
+            <div class="space-y-4 recent-documents">
+                {% for doc in documents %}
+                <div class="bg-white p-4 rounded-lg shadow document-item" data-document-id="{{ doc['id'] }}"
+                    data-content="{{ doc['content']|tojson|safe }}"> <!-- Fixed: proper escape content -->
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-medium">{{ doc['title'] }}</h3>
+                            <p class="text-sm text-gray-500">{{ doc['created'].strftime('%Y-%m-%d %H:%M') }}</p>
+                        </div>
+                        <a href="{{ url_for('analysis.analyze', id=doc['id']) }}"
+                            class="bg-purple-100 text-purple-600 px-3 py-1 rounded-lg hover:bg-purple-200">
+                            View
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-gray-500">No documents yet. Start by uploading one!</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Upload Modal -->
+<div id="upload-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg p-8 max-w-lg w-full mx-4">
+        <h2 class="text-2xl font-bold mb-4">Upload Document</h2>
+        <div class="upload-zone p-8 text-center rounded-lg mb-4">
+            <input type="file" id="file-upload" class="hidden" accept=".pdf,.docx,.txt">
+            <label for="file-upload" class="cursor-pointer">
+                <div class="text-gray-500">
+                    <i class="fas fa-cloud-upload-alt text-4xl mb-4"></i>
+                    <p>Drag and drop your file here or click to browse</p>
+                    <p class="text-sm">Supports PDF, DOCX, and TXT files</p>
+                </div>
+            </label>
+        </div>
+        <div class="flex justify-end space-x-4">
+            <button onclick="document.getElementById('upload-modal').classList.add('hidden')"
+                class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                Cancel
+            </button>
+            <button onclick="handleUpload()" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                Upload
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

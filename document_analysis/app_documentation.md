@@ -84,6 +84,7 @@ server {
 ```
 
 4. Enable and start services:
+  
 ```bash
 sudo systemctl enable document-analysis
 sudo systemctl start document-analysis

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en" class="h-full bg-gray-100">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body class="h-full">
     <nav class="bg-purple-600">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -20,11 +22,13 @@
                     </div>
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-4">
-                            <a href="{{ url_for('index') }}" class="text-white hover:bg-purple-700 px-3 py-2 rounded-md">
+                            <a href="{{ url_for('index') }}"
+                                class="text-white hover:bg-purple-700 px-3 py-2 rounded-md">
                                 Home
                             </a>
                             {% if g.user %}
-                            <a href="{{ url_for('analysis.index') }}" class="text-white hover:bg-purple-700 px-3 py-2 rounded-md">
+                            <a href="{{ url_for('analysis.index') }}"
+                                class="text-white hover:bg-purple-700 px-3 py-2 rounded-md">
                                 Dashboard
                             </a>
                             {% endif %}
@@ -33,12 +37,19 @@
                 </div>
                 <div class="flex items-center">
                     {% if g.user %}
-                    <span class="text-white mr-4">{{ g.user['username'] }}</span>
+                    <span class="text-white mr-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        {{ g.user['username'] }}
+                    </span>
                     <a href="{{ url_for('auth.logout') }}" class="text-white hover:bg-purple-700 px-3 py-2 rounded-md">
                         Log Out
                     </a>
                     {% else %}
-                    <a href="{{ url_for('auth.register') }}" class="text-white hover:bg-purple-700 px-3 py-2 rounded-md">
+                    <a href="{{ url_for('auth.register') }}"
+                        class="text-white hover:bg-purple-700 px-3 py-2 rounded-md">
                         Register
                     </a>
                     <a href="{{ url_for('auth.login') }}" class="text-white hover:bg-purple-700 px-3 py-2 rounded-md">
@@ -64,4 +75,5 @@
     <script src="{{ url_for('static', filename='js/analysis.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>
+
 </html>

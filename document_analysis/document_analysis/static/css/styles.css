@@ -68,3 +68,37 @@
         transform: translateY(0);
     }
 }
+
+/* Analysis result tags */
+.tag {
+    background-color: rgba(139, 92, 246, 0.1);
+    color: rgb(139, 92, 246);
+}
+
+/* Analysis result progress bar */
+.progress-bar {
+    background-color: rgba(139, 92, 246, 0.1);
+}
+
+.progress-bar-fill {
+    background-color: rgb(139, 92, 246);
+}
+
+
+/* customozing the scroll bar of the website */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(139, 92, 246);
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

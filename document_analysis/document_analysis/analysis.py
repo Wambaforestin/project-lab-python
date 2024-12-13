@@ -133,10 +133,11 @@ def generate_quiz():
     
     if not text:
         return jsonify({"error": "No text provided"}), 400
-        
+    
+    # Prompt for quiz  generation    
     prompt = f"""Generate a quiz based on the following text. Include:
-    - 5 multiple-choice questions
-    - 3 fill-in-the-blank questions
+    - 15 multiple-choice questions
+    - 3 fill-in-the-blank questions with associated answer choices 
     - 2 true/false questions
     Format the output as a JSON object.
     

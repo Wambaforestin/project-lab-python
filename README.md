@@ -8,7 +8,7 @@ This repository contains a collection of Python projects.
 2. Screen Shot Program
 3. Delete Unscribe emails program
 4. Start your day
-5. Document Analysis
+5. Document Analysis with Gemini AI
 
 ## To learn the Basis of python
 

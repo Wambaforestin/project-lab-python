@@ -1,5 +1,5 @@
 import sqlite3
-import click
+import click # Flask's command line interface
 from flask import current_app, g
 
 def get_db():

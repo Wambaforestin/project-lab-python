@@ -3,22 +3,38 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, current_app, 
     send_from_directory, jsonify
 )
-from werkzeug.exceptions import abort
-from werkzeug.utils import secure_filename
-from document_analysis.auth import login_required
-from document_analysis.db import get_db
-import google.generativeai as genai
-import PyPDF2
-import docx
-import json
+from werkzeug.exceptions import abort # abort , used to return an HTTP status code
+from werkzeug.utils import secure_filename # secure_filename, used to secure the filename of the uploaded file
+from document_analysis.auth import login_required # login_required, used to require authentication to access a view
+from document_analysis.db import get_db # get_db, used to get a connection to the database
+import google.generativeai as genai # Import the generativeai module from the google package
+import PyPDF2 # Import the PyPDF2 module
+import docx # Import the docx module
+import json 
 
-bp = Blueprint('analysis', __name__)
+bp = Blueprint('analysis', __name__) # Blueprint object for the analysis module, that defines the routes and views for the analysis module
 
 def allowed_file(filename):
+    """Check if a file has an allowed extension.
+
+    Args:
+        filename (str): The name of the file to check.
+
+    Returns:
+        bool: True if the file has an allowed extension, False otherwise.
+    """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
 def extract_text(file):
+    """Extract text from a file.
+
+    Args:
+        file (FileStorage): The file from which to extract text.
+
+    Returns:
+        str: The extracted text from the file.
+    """
     filename = secure_filename(file.filename)
     file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
     file.save(file_path)
@@ -41,17 +57,22 @@ def extract_text(file):
     
     return text
 
-@bp.route('/')
+@bp.route('/') # Define the index route for the analysis module
 def index():
     return render_template('analysis/index.html')
 
-@bp.route('/landing')
+@bp.route('/landing') # Define the landing route for the analysis module
 def landing():
     return render_template('analysis/landing.html')
 
-@bp.route('/dashboard')
+@bp.route('/dashboard') # Define the dashboard route for the analysis module it requires authentication to access
 @login_required
 def dashboard():
+    """Render the dashboard view for the analysis module.
+
+    Returns:
+        _io.TextIOWrapper: The rendered dashboard view.
+    """
     db = get_db()
     documents = db.execute(
         'SELECT d.id, title, content, created, author_id, username'
@@ -73,9 +94,14 @@ def dashboard():
                          documents=documents, 
                          recent_analysis=recent_analysis)
 
-@bp.route('/upload', methods=['POST'])
+@bp.route('/upload', methods=['POST']) # Define the upload route for the analysis module it requires authentication to access
 @login_required
 def upload_document():
+    """Upload a document file and extract text from it.
+
+    Returns:
+        str: A JSON response with a message indicating if the file was successfully processed or an error
+    """
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
     
@@ -83,7 +109,7 @@ def upload_document():
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
     
-    if file and allowed_file(file.filename):
+    if file and allowed_file(file.filename): # allowed_file func call
         try:
             text = extract_text(file)
             db = get_db()
@@ -99,9 +125,17 @@ def upload_document():
     
     return jsonify({"error": "File type not allowed"}), 400
 
-@bp.route('/analyze/<int:id>', methods=['GET'])
+@bp.route('/analyze/<int:id>', methods=['GET']) # Define the analyze route for the analysis module it requires authentication to access
 @login_required
 def analyze(id):
+    """Analyze a document by generating a quiz, summary, keywords, or translation.
+
+    Args:
+        id (int): The id of the document to analyze.
+
+    Returns:
+        _io.TextIOWrapper: The rendered analysis view.
+    """
     document = get_db().execute(
         'SELECT d.id, title, content, created, author_id, username'
         ' FROM document d JOIN user u ON d.author_id = u.id'
@@ -124,9 +158,14 @@ def analyze(id):
                          document=document, 
                          analyses=analyses)
 
-@bp.route('/generate_quiz', methods=['POST'])
+@bp.route('/generate_quiz', methods=['POST']) # Define the generate_quiz route for the analysis module it requires authentication to access
 @login_required
 def generate_quiz():
+    """Generate a quiz based on the provided text.
+    
+    Returns:
+        str: A JSON response with the generated quiz or an error message
+    """
     data = request.get_json()
     text = data.get('text')
     document_id = data.get('document_id')
@@ -143,7 +182,7 @@ def generate_quiz():
     
     Text: {text}"""
     
-    model = genai.GenerativeModel('gemini-pro')
+    model = genai.GenerativeModel('gemini-pro') # Create a generative model object.
     response = model.generate_content(prompt)
     
     if document_id:
@@ -155,11 +194,16 @@ def generate_quiz():
         )
         db.commit()
     
-    return jsonify({"quiz": response.text})
+    return jsonify({"quiz": response.text}) 
 
-@bp.route('/summarize', methods=['POST'])
+@bp.route('/summarize', methods=['POST']) # Define the summarize route for the analysis module it requires authentication to access
 @login_required
 def summarize():
+    """Summarize the provided text.
+
+    Returns:
+        str: A JSON response with the generated summary or an error message
+    """
     data = request.get_json()
     text = data.get('text')
     document_id = data.get('document_id')
@@ -184,9 +228,13 @@ def summarize():
     
     return jsonify({"summary": response.text})
 
-@bp.route('/extract_keywords', methods=['POST'])
+@bp.route('/extract_keywords', methods=['POST']) # Define the extract_keywords route for the analysis module it requires authentication to access
 @login_required
 def extract_keywords():
+    """Extract keywords from the provided text.
+
+    Returns: str: A JSON response with the extracted keywords or an error message
+    """
     data = request.get_json()
     text = data.get('text')
     document_id = data.get('document_id')
@@ -224,9 +272,14 @@ def extract_keywords():
     
     return jsonify({"keywords": keywords})
 
-@bp.route('/translate', methods=['POST'])
+@bp.route('/translate', methods=['POST']) # Define the translate route for the analysis module it requires authentication to access
 @login_required
 def translate():
+    """Translate the provided text to the target language.
+
+    Returns:
+        str: A JSON response with the translated text or an error message
+    """
     data = request.get_json()
     text = data.get('text')
     target_language = data.get('target_language')
@@ -250,3 +303,4 @@ def translate():
         db.commit()
     
     return jsonify({"translation": response.text})
+

@@ -13,7 +13,7 @@ def index():
 
 def create_app(test_config=None):
     # Create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, static_folder='static', template_folder='templates',)
     CORS(app)
     
     app.config.from_mapping(

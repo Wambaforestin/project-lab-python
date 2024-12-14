@@ -10,16 +10,17 @@
             <h1 class="text-3xl font-bold">{{ document['title'] }}</h1>
             <div class="space-x-4">
                 <button onclick="generateQuiz()"
-                        class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                    class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
                     Generate Quiz
                 </button>
                 <button onclick="generateSummary()"
-                        class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                    class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
                     Create Summary
                 </button>
             </div>
         </div>
-        <p class="text-gray-500">Uploaded by {{ document['username'] }} on {{ document['created'].strftime('%Y-%m-%d %H:%M') }}</p>
+        <p class="text-gray-500">Uploaded by {{ document['username'] }} on {{ document['created'].strftime('%Y-%m-%d
+            %H:%M') }}</p>
     </div>
 
     <!-- Main Content -->
@@ -53,5 +54,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/view.js') }}"></script>
+<script src="{{ url_for('static', filename='js/analysis.js') }}"></script>
 {% endblock %}

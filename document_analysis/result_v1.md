@@ -95,7 +95,7 @@ The first version of the Document Analysis Application successfully implements c
 ### Index Page
 
 ![Home Page](./result_images/v1_img.png)
-_Modern landing page with feature overview_
+_Index page view_
 
 ### Dashboard View
 

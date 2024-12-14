@@ -188,7 +188,7 @@ curl -X POST \
 
 ## Development Notes
 
-1. API version: v1
+1. API version: v1.0.2
 2. Base URL: `http://localhost:5000` (development)
 
 ## Local Development Setup

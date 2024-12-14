@@ -90,9 +90,22 @@ The first version of the Document Analysis Application successfully implements c
 6. API documentation
 7. Performance optimization
 
-## Screenshots
+## User Interface Screenshots
 
-[Add screenshots of key features and interfaces]
+### Index Page
+
+![Home Page](./result_images/v1_img.png)
+_Modern landing page with feature overview_
+
+### Dashboard View
+
+![Dashboard](./result_images/v1_img2.png)
+_User dashboard showing document management_
+
+### Analysis Features
+
+![Analysed doc View](./result_images/v1_img3.png)
+_Document analysis in action_
 
 ## Version History
 

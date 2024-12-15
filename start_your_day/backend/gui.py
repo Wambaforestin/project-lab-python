@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from emails import DailyEmail
 from scheduler import Scheduler
+import json
 
 class GUI:
     # The GUI should enable the admin to...
@@ -68,20 +69,23 @@ class GUI:
         self.__build_gui_controls(controls_frame)
 
         # set initial values for variables
-        self.__email = DailyEmail()
+        try:
+           self.__load_settings()
+        except: 
+            self.__email = DailyEmail()
 
-        self.__add_recipient_var.set('')
-        self.__recipient_list_var.set(self.__email.recipient_list)
-        
-        self.__hour_var.set('07') # defaul send time
-        self.__minute_var.set('30')
-        
-        self.__quote_var.set(self.__email.content['quote']['include'])
-        self.__weather_var.set(self.__email.content['weather']['include'])
-        self.__wikipedia_var.set(self.__email.content['wikipedia']['include']) 
+            self.__add_recipient_var.set('')
+            self.__recipient_list_var.set(self.__email.recipient_list)
+                
+            self.__hour_var.set('07') # defaul send time
+            self.__minute_var.set('30')
+                
+            self.__quote_var.set(self.__email.content['quote']['include'])
+            self.__weather_var.set(self.__email.content['weather']['include'])
+            self.__wikipedia_var.set(self.__email.content['wikipedia']['include']) 
 
-        self.__sender_email_var.set(self.__email.sender_credentials['email'])
-        self.__sender_password_var.set(self.__email.sender_credentials['password'])
+            self.__sender_email_var.set(self.__email.sender_credentials['email'])
+            self.__sender_password_var.set(self.__email.sender_credentials['password'])
 
         # initialize scheduler
         self.__scheduler = Scheduler()
@@ -233,6 +237,45 @@ class GUI:
         # note: settings are not updated before manual send
         print('Manually sending email digest...')
         self.__email.send_email()
+        
+    """
+    save configuration settings to a file
+    """
+    # def __save_settings(self,file_path='settings.json'):
+    #     settings = {
+    #         'recipients': self.__email.recipient_list,
+    #         'quote': self.__quote_var.get(),
+    #         'weather': self.__weather_var.get(),
+    #         'wikipedia': self.__wikipedia_var.get(),
+    #         'hour': self.__hour_var.get(),
+    #         'minute': self.__minute_var.get(),
+    #         'sender_email': self.__sender_email_var.get(),
+    #         'sender_password': self.__sender_password_var.get()
+    #     }
+    #     with open(file_path, 'w') as file:
+    #         json.dump(settings, file, indent=4)
+    #     print('Settings saved to settings.json')
+        
+    """
+    Load configuration settings from a file
+    """
+    def __load_settings(self, file_path='settings.json'):
+        try:
+            with open(file_path, 'r') as file:
+                settings = json.load(file)
+                self.__recipient_list_var.set(settings['recipients'])
+                self.__quote_var.set(settings['quote'])
+                self.__weather_var.set(settings['weather'])
+                self.__wikipedia_var.set(settings['wikipedia'])
+                self.__hour_var.set(settings['hour'])
+                self.__minute_var.set(settings['minute'])
+                self.__sender_email_var.set(settings['sender_email'])
+                self.__sender_password_var.set(settings['sender_password'])
+            self.__update_settings()
+        except FileNotFoundError:
+            print('No settings file found...')
+        except json.JSONDecodeError:
+            print('Error loading settings file...')
 
     """
     Shutdown the scheduler before closing the GUI window
@@ -241,7 +284,10 @@ class GUI:
         print('Shutting down the scheduler...')
         self.__scheduler.stop()
         self.__scheduler.join()
-        self.__root.destroy() # close the GUI
+        try:
+            self.__save_settings()
+        except Exception as e:
+            self.__root.destroy() # close the GUI window
 
 if __name__ == '__main__':
     root = Tk()
